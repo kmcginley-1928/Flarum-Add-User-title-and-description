@@ -7,6 +7,6 @@ Adds two user fields - `title` and `short_description` - exposes them via API, s
 ```bash
 # From the extension root
 composer install
-composer require kmcginley-1928/flarum-user-extras:*   # or path repos in composer.json
+composer require kmcginley-1928/flarum-add-user-title-and-description:*   # or path repos in composer.json
 php flarum cache:clear
 php flarum migrate

@@ -1,5 +1,5 @@
 {
-  "name": "kmcginley-1928/flarum-user-extras",
+  "name": "kmcginley-1928/flarum-add-user-title-and-description",
   "description": "Adds user title and short profile description fields, shows them in FoF User Directory, and provides a simple edit modal.",
   "type": "flarum-extension",
   "license": "MIT",
