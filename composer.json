@@ -1,25 +1,20 @@
+
 {
   "name": "kmcginley-1928/flarum-add-user-title-and-description",
-  "description": "Adds user title and short profile description fields, shows them in FoF User Directory, and provides a simple edit modal.",
+  "description": "Adds user title and short description fields; shows them on user cards and in FoF User Directory.",
   "type": "flarum-extension",
   "license": "MIT",
-  "authors": [
-    {
-      "name": "Keith McGinley",
-      "email": "me@exampkeithmcginley.com"
-    }
-  ],
   "require": {
     "flarum/core": "^1.8"
   },
   "autoload": {
     "psr-4": {
-      "Keith\\UserExtras\\": "src/"
+      "Kmcginley1928\\AddUserTitleAndDescription\\": "src/"
     }
   },
   "extra": {
     "flarum-extension": {
-      "title": "User Extras",
+      "title": "Add User Title and Description",
       "icon": {
         "name": "fas fa-id-card",
         "backgroundColor": "#4c7cf3",

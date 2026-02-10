@@ -1,33 +1,30 @@
 <?php
 
-namespace Keith\UserExtras;
-
-use Flarum\Api\Serializer\UserSerializer;
 use Flarum\Extend;
-use Flarum\User\Event\Saving as UserSaving;
-use Flarum\User\User;
-use Keith\UserExtras\Listeners\SaveUserExtras;
+use Flarum\Api\Serializer\UserSerializer;
+use Flarum\User\Event\Saving;
+use Kmcginley1928\AddUserTitleAndDescription\Listeners\SaveUserExtras;
 
 return [
-    // Database migration
-    (new Extend\Database())->migrateFrom(__DIR__ . '/migrations'),
+    // Load DB migrations
+    (new Extend\Migrations())->add(__DIR__ . '/migrations'),
 
-    // Locales
+    // Localisation files
     (new Extend\Locales(__DIR__ . '/locale')),
 
-    // Forum assets
+    // Forum JS bundle
     (new Extend\Frontend('forum'))
         ->js(__DIR__ . '/js/dist/forum.js'),
 
-    // Expose attributes via API
+    // Expose extra attributes on users
     (new Extend\Serializer(UserSerializer::class))
-        ->attributes(function (UserSerializer $serializer, User $user, array $attributes) {
+        ->attributes(function (UserSerializer $serializer, $user, array $attributes) {
             $attributes['title'] = $user->title;
             $attributes['short_description'] = $user->short_description;
             return $attributes;
         }),
 
-    // Save attributes on PATCH /users/:id
+    // Persist on PATCH /users/:id
     (new Extend\Event())
-        ->listen(UserSaving::class, SaveUserExtras::class),
+        ->listen(Saving::class, SaveUserExtras::class),
 ];

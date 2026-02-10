@@ -1,6 +1,6 @@
 <?php
 
-namespace Keith\UserExtras\Listeners;
+namespace Kmcginley1928\AddUserTitleAndDescription\Listeners;
 
 use Flarum\Foundation\ValidationException;
 use Flarum\User\Event\Saving;
@@ -8,7 +8,7 @@ use Illuminate\Support\Arr;
 
 class SaveUserExtras
 {
-    public function handle(Saving $event)
+    public function handle(Saving $event): void
     {
         $attributes = Arr::get($event->data, 'attributes', []);
 
@@ -16,7 +16,6 @@ class SaveUserExtras
             return;
         }
 
-        // Permission: allow user to edit own fields, or anyone who can edit the user
         $actor = $event->actor;
         $user  = $event->user;
         $canEdit = $actor->id === $user->id || $actor->can('edit', $user);
@@ -29,27 +28,22 @@ class SaveUserExtras
 
         if (array_key_exists('title', $attributes)) {
             $title = $attributes['title'];
-            if (!is_null($title)) {
-                $title = trim((string) $title);
-                if (mb_strlen($title) > 200) {
-                    throw new ValidationException([
-                        'title' => ['Title may not be greater than 200 characters.'],
-                    ]);
-                }
+            $title = is_null($title) ? null : trim((string) $title);
+            if ($title && mb_strlen($title) > 100) {
+                throw new ValidationException([
+                    'title' => ['Title may not be greater than 100 characters.'],
+                ]);
             }
             $user->title = $title ?: null;
         }
 
         if (array_key_exists('short_description', $attributes)) {
             $desc = $attributes['short_description'];
-            if (!is_null($desc)) {
-                $desc = trim((string) $desc);
-                // Soft limit for sanity. Raise if needed.
-                if (mb_strlen($desc) > 1000) {
-                    throw new ValidationException([
-                        'short_description' => ['Description may not be greater than 1000 characters.'],
-                    ]);
-                }
+            $desc = is_null($desc) ? null : trim((string) $desc);
+            if ($desc && mb_strlen($desc) > 1000) {
+                throw new ValidationException([
+                    'short_description' => ['Description may not be greater than 1000 characters.'],
+                ]);
             }
             $user->short_description = $desc ?: null;
         }
