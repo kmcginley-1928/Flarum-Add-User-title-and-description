@@ -1,26 +1,29 @@
 <?php
 
 use Flarum\Extend;
-use Flarum\Api\Serializer\UserSerializer;
 use Flarum\User\Event\Saving;
+use Kmcginley1928\AddUserTitleAndDescription\Listeners\SaveUserExtras;
 
 $extenders = [
-    // Locales
+
+    // Locales are safe everywhere
     (new Extend\Locales(__DIR__ . '/locale')),
 
-    // Forum JS (safe even if file is missing; will just 404)
-    (new Extend\Frontend('forum'))->js(__DIR__ . '/js/dist/forum.js'),
+    // Forum JS (safe even if file missing)
+    (new Extend\Frontend('forum'))
+        ->js(__DIR__ . '/js/dist/forum.js'),
 
-    // Expose fields in API
-    (new Extend\Serializer(\Flarum\Api\Serializer\UserSerializer::class))
-        ->attributes(function (\Flarum\Api\Serializer\UserSerializer $serializer, $user, array $attributes) {
-            $attributes['title'] = $user->title;
-            $attributes['short_description'] = $user->short_description;
-            return $attributes;
+    // Add API attributes (correct extender for your Flarum build)
+    (new Extend\ApiSerializer(\Flarum\Api\Serializer\UserSerializer::class))
+        ->attribute('title', function ($serializer, $user) {
+            return $user->title;
+        })
+        ->attribute('short_description', function ($serializer, $user) {
+            return $user->short_description;
         }),
 ];
 
-// Guard the listener so boot never fatals if autoload/namespace is off
+// Add listener only if class exists (prevents boot fatal)
 if (class_exists(\Kmcginley1928\AddUserTitleAndDescription\Listeners\SaveUserExtras::class)) {
     $extenders[] = (new Extend\Event())
         ->listen(Saving::class, \Kmcginley1928\AddUserTitleAndDescription\Listeners\SaveUserExtras::class);
