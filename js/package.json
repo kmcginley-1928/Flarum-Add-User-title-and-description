@@ -1,0 +1,19 @@
+{
+  "name": "@kmcginley-1928/flarum-user-extras",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "webpack --mode development",
+    "prod": "webpack --mode production"
+  },
+  "dependencies": {
+    "flarum-webpack-config": "^2.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.25.0",
+    "@babel/preset-env": "^7.25.0",
+    "@babel/plugin-transform-react-jsx": "^7.25.0",
+    "webpack": "^5.91.0",
+    "webpack-cli": "^5.1.4"
+  }
+}
