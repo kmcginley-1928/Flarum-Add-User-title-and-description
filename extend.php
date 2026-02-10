@@ -6,11 +6,7 @@ use Flarum\User\Event\Saving;
 use Kmcginley1928\AddUserTitleAndDescription\Listeners\SaveUserExtras;
 
 return [
-    // Migration loader (Asirem / minimal Flarum compatible)
-    (new Extend\Compat('flarum.migrations'))
-        ->directory(__DIR__ . '/migrations'),
-
-    // Localisation files
+    // Locales
     (new Extend\Locales(__DIR__ . '/locale')),
 
     // Forum JS
@@ -25,7 +21,6 @@ return [
             return $attributes;
         }),
 
-    // Save on PATCH /users/:id
-    (new Extend\Event())
-        ->listen(Saving::class, SaveUserExtras::class),
+    // Persist fields on PATCH
+    (new Extend\Event())->listen(Saving::class, SaveUserExtras::class),
 ];
